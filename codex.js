@@ -17,18 +17,45 @@ let pH = {};
 
 let hitboxLaw = null
 
+let direcaoAtual = 's';
+let indexFrame = 0;
+let contadorFrames = 0;
+
 const rooms = [
     {
         name: "roomStart",
         status: true,
-        back: "url('./schoolFront.png')"
+        back: "url('../schoolFront.png')"
     },
     {
         name: "corredor",
         status: false,
-        back: "url('./corredor.png')"
+        back: "url('../corredor.png')"
     }
 ]
+
+const SPRITES = {
+    s: [ 
+        { x: 0, y: 0 },
+        { x: -68, y: 0 },
+        { x: 0, y: 0 },
+        { x: -136, y: 0 }
+    ],
+    w: [ 
+        { x: -204, y: 0 },
+        { x: -272, y: 0 },
+        { x: -204, y: 0 },
+        { x: -340, y: 0 }
+    ],
+    d: [ 
+        { x: 0, y: -116 },
+        { x: -68, y: -116 }
+    ],
+    a: [ 
+        { x: -136, y: -116 },
+        { x: -204, y: -116 }
+    ]
+};
 
 const teclas = {
     a: false,
@@ -44,7 +71,6 @@ addEventListener('keydown', (tecla) => {
     if (key === 'enter') {
         let hitboxNoCenarioX = playerX - roomX;
         let hitboxNoCenarioY = (playerY + 96) - roomY;
-
         console.log(`X no cenário: ${hitboxNoCenarioX.toFixed(1)} | Y no cenário: ${hitboxNoCenarioY.toFixed(1)}`);
         alert(`Posição no cenário:\nX: ${hitboxNoCenarioX.toFixed(1)}\nY: ${hitboxNoCenarioY.toFixed(1)}`);
     }
@@ -61,7 +87,7 @@ player.style.left = `${playerX}px`;
 player.style.top = `${playerY}px`;
 
 function hitbox() {
-    let playerHitbox = {
+    playerHitbox = {
         p1x: playerX,
         p1y: playerY + 96,
         p2x: playerX + playerInfo.width,
@@ -82,25 +108,57 @@ function cenario() {
     });
 }
 
+function atualizarAnimacao(andando, direcao) {
+    const listaFrames = SPRITES[direcao] || SPRITES['s'];
+
+    // PROTEÇÃO CRÍTICA: Se o indexFrame sobrou de uma lista maior anterior, reseta para 0
+    if (indexFrame >= listaFrames.length) {
+        indexFrame = 0;
+    }
+
+    if (andando) {
+        contadorFrames++;
+        if (contadorFrames >= 10) { 
+            indexFrame = (indexFrame + 1) % listaFrames.length;
+            contadorFrames = 0;
+        }
+    } else {
+        indexFrame = 0; 
+        contadorFrames = 0;
+    }
+
+    const frameAtual = listaFrames[indexFrame];
+    player.style.backgroundPosition = `${frameAtual.x}px ${frameAtual.y}px`;
+}
+
 function mover() {
     let moveX = 0;
     let moveY = 0;
 
-    if (teclas.a) moveX -= 1;
-    if (teclas.d) moveX += 1;
-    if (teclas.w) moveY -= 1;
-    if (teclas.s) moveY += 1;
+    if (teclas.a) { moveX -= 1; direcaoAtual = 'a'; }
+    if (teclas.d) { moveX += 1; direcaoAtual = 'd'; }
+    if (teclas.w) { moveY -= 1; direcaoAtual = 'w'; }
+    if (teclas.s) { moveY += 1; direcaoAtual = 's'; }
 
-    const speed = 4
+    let passoX = moveX * 4;
+    let passoY = moveY * 4;
+
+    if (moveX !== 0 && moveY !== 0) {
+        passoX = Math.round(moveX * 4 * 0.7071);
+        passoY = Math.round(moveY * 4 * 0.7071);
+    }
+
+    const andando = (moveX !== 0 || moveY !== 0);
     const salaAtual = rooms.find(element => element.status === true);
 
-    roomX -= moveX * speed;
-    roomY -= moveY * speed;
+    roomX -= passoX;
+    roomY -= passoY;
 
     room.style.left = `${roomX}px`;
     room.style.top = `${roomY}px`;
 
     hitbox()
+    atualizarAnimacao(andando, direcaoAtual);
 
     let atualNoCenarioY = (playerY + 96) - roomY;
 
@@ -108,7 +166,7 @@ function mover() {
         hitboxLaw = 0;
 
         if (atualNoCenarioY <= 852) {
-            salaAtual.status = false;
+            rooms[0].status = false;
             rooms[1].status = true;
             cenario();
 
@@ -121,24 +179,24 @@ function mover() {
             room.style.top = `${roomY}px`;
         }
     }
+    
     if (salaAtual && salaAtual.name === "corredor") {
-        hitboxLaw = 0;
+        hitboxLaw = 1;
 
-        if (atualNoCenarioY >= 2096) {
-            salaAtual.status = false;
+        if (atualNoCenarioY >= 2110) {
+            rooms[1].status = false;
             rooms[0].status = true;
             cenario();
 
             room.style.width = `${1540}px`;
             room.style.height = `${1468}px`;
-            roomX = (telaInfo.width - roomInfo.width) / 2;
-            roomY = telaInfo.height - roomInfo.height + 350
+            roomX = (telaInfo.width - 1540) / 2;
+            roomY = telaInfo.height - 1468 + 350;
 
             room.style.left = `${roomX}px`;
             room.style.top = `${roomY}px`;
         }
     }
-
 
     requestAnimationFrame(mover)
 }
