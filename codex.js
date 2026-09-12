@@ -3,7 +3,7 @@ const debugHit = document.getElementById('hitboxPlayer')
 const room = document.getElementById('background')
 const tela = document.getElementById('tela')
 
-const roomInfo = room.getBoundingClientRect()
+let roomInfo = room.getBoundingClientRect()
 const playerInfo = player.getBoundingClientRect()
 const telaInfo = tela.getBoundingClientRect()
 
@@ -31,31 +31,48 @@ const rooms = [
         name: "corredor",
         status: false,
         back: "url('./corredor.png')"
+    },
+    {
+        name: "room1",
+        status: false,
+        back: "url('./roomBase.png')"
+    },
+    {
+        name: "room2",
+        status: false,
+        back: "url('./roomBase.png')"
+    },
+    {
+        name: "room3",
+        status: false,
+        back: "url('./roomBase.png')"
     }
 ]
 
 const SPRITES = {
-    s: [ 
+    s: [
         { x: 0, y: 0 },
         { x: -68, y: 0 },
         { x: 0, y: 0 },
         { x: -136, y: 0 }
     ],
-    w: [ 
+    w: [
         { x: -204, y: 0 },
         { x: -272, y: 0 },
         { x: -204, y: 0 },
         { x: -340, y: 0 }
     ],
-    d: [ 
+    d: [
         { x: 0, y: -116 },
         { x: -68, y: -116 }
     ],
-    a: [ 
+    a: [
         { x: -136, y: -116 },
         { x: -204, y: -116 }
     ]
 };
+
+let moveStatus = true
 
 const teclas = {
     a: false,
@@ -63,6 +80,8 @@ const teclas = {
     d: false,
     w: false
 }
+
+const getSalaAtual = () => rooms.find(element => element.status === true);
 
 addEventListener('keydown', (tecla) => {
     const key = tecla.key.toLowerCase();
@@ -73,8 +92,208 @@ addEventListener('keydown', (tecla) => {
         let hitboxNoCenarioY = (playerY + 96) - roomY;
         console.log(`X no cenário: ${hitboxNoCenarioX.toFixed(1)} | Y no cenário: ${hitboxNoCenarioY.toFixed(1)}`);
         alert(`Posição no cenário:\nX: ${hitboxNoCenarioX.toFixed(1)}\nY: ${hitboxNoCenarioY.toFixed(1)}`);
+
+        const salaAtiva = getSalaAtual();
+
+        if (!salaAtiva) return;
+
+        if (salaAtiva.name === "roomStart") {
+            hitboxLaw = 0;
+
+            if (hitboxNoCenarioY <= 852) {
+                moveStatus = true
+                rooms.forEach(element => element.status = false);
+                rooms[1].status = true;
+                cenario();
+
+                room.style.width = `${3516}px`;
+                room.style.height = `${2116}px`;
+                roomX = (telaInfo.width - 3516) / 2;
+                roomY = -1400;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+            }
+        }
+        else if (salaAtiva.name === "corredor") {
+            hitboxLaw = 1;
+
+            if (hitboxNoCenarioY >= 2110) {
+                moveStatus = true
+                rooms.forEach(element => element.status = false);
+                rooms[0].status = true;
+                cenario();
+
+                room.style.width = `${1540}px`;
+                room.style.height = `${1468}px`;
+                roomX = (telaInfo.width - 1540) / 2;
+                roomY = telaInfo.height - 1468 + 350;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+            }
+            else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 &&
+                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
+                moveStatus = false
+                rooms.forEach(element => element.status = false);
+                rooms[2].status = true;
+                cenario();
+
+                room.style.width = `${1036}px`;
+                room.style.height = `${804}px`;
+
+                roomX = (telaInfo.width - 1036) / 2;
+                roomY = (telaInfo.height - 804) / 2;
+
+                playerX = (roomInfo.width - playerInfo.width)
+                playerY = 0;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+                player.style.left = `${playerX}px`;
+                player.style.top = `${playerY}px`;
+            }
+
+            else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 &&
+                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
+                moveStatus = false
+                rooms.forEach(element => element.status = false);
+                rooms[2].status = true;
+                cenario();
+
+                room.style.width = `${1036}px`;
+                room.style.height = `${804}px`;
+
+                roomX = (telaInfo.width - 1036) / 2;
+                roomY = (telaInfo.height - 804) / 2;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+            }
+
+            else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 &&
+                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
+                moveStatus = false
+                rooms.forEach(element => element.status = false);
+                rooms[2].status = true;
+                cenario();
+
+                room.style.width = `${1036}px`;
+                room.style.height = `${804}px`;
+
+                roomX = (telaInfo.width - 1036) / 2;
+                roomY = (telaInfo.height - 804) / 2;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+            }
+
+            else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 &&
+                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
+                moveStatus = false
+                rooms.forEach(element => element.status = false);
+                rooms[2].status = true;
+                cenario();
+
+                room.style.width = `${1036}px`;
+                room.style.height = `${804}px`;
+
+                roomX = (telaInfo.width - 1036) / 2;
+                roomY = (telaInfo.height - 804) / 2;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+            }
+
+            else if (hitboxNoCenarioX >= 1012 && hitboxNoCenarioX <= 1096 &&
+                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
+                moveStatus = false
+                rooms.forEach(element => element.status = false);
+                rooms[2].status = true;
+                cenario();
+
+                room.style.width = `${1036}px`;
+                room.style.height = `${804}px`;
+
+                roomX = (telaInfo.width - 1036) / 2;
+                roomY = (telaInfo.height - 804) / 2;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+            }
+
+            else if (hitboxNoCenarioX >= 245 && hitboxNoCenarioX <= 329 &&
+                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
+                moveStatus = false
+                rooms.forEach(element => element.status = false);
+                rooms[2].status = true;
+                cenario();
+
+                room.style.width = `${1036}px`;
+                room.style.height = `${804}px`;
+
+                roomX = (telaInfo.width - 1036) / 2;
+                roomY = (telaInfo.height - 804) / 2;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+            }
+
+            else if (hitboxNoCenarioX >= 2229 && hitboxNoCenarioX <= 2314 &&
+                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
+                moveStatus = false
+                rooms.forEach(element => element.status = false);
+                rooms[2].status = true;
+                cenario();
+
+                room.style.width = `${1036}px`;
+                room.style.height = `${804}px`;
+
+                roomX = (telaInfo.width - 1036) / 2;
+                roomY = (telaInfo.height - 804) / 2;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+            }
+
+            else if (hitboxNoCenarioX >= 2996 && hitboxNoCenarioX <= 3081 &&
+                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
+                moveStatus = false
+                rooms.forEach(element => element.status = false);
+                rooms[2].status = true;
+                cenario();
+
+                room.style.width = `${1036}px`;
+                room.style.height = `${804}px`;
+
+                roomX = (telaInfo.width - 1036) / 2;
+                roomY = (telaInfo.height - 804) / 2;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+            }
+
+            else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 &&
+                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
+                moveStatus = false
+                rooms.forEach(element => element.status = false);
+                rooms[2].status = true;
+                cenario();
+
+                room.style.width = `${1036}px`;
+                room.style.height = `${804}px`;
+
+                roomX = (telaInfo.width - 1036) / 2;
+                roomY = (telaInfo.height - 804) / 2;
+
+                room.style.left = `${roomX}px`;
+                room.style.top = `${roomY}px`;
+
+            }
+        }
     }
-})
+});
+
 
 addEventListener('keyup', (tecla) => {
     const key = tecla.key.toLowerCase();
@@ -111,19 +330,18 @@ function cenario() {
 function atualizarAnimacao(andando, direcao) {
     const listaFrames = SPRITES[direcao] || SPRITES['s'];
 
-    // PROTEÇÃO CRÍTICA: Se o indexFrame sobrou de uma lista maior anterior, reseta para 0
     if (indexFrame >= listaFrames.length) {
         indexFrame = 0;
     }
 
     if (andando) {
         contadorFrames++;
-        if (contadorFrames >= 10) { 
+        if (contadorFrames >= 10) {
             indexFrame = (indexFrame + 1) % listaFrames.length;
             contadorFrames = 0;
         }
     } else {
-        indexFrame = 0; 
+        indexFrame = 0;
         contadorFrames = 0;
     }
 
@@ -140,63 +358,31 @@ function mover() {
     if (teclas.w) { moveY -= 1; direcaoAtual = 'w'; }
     if (teclas.s) { moveY += 1; direcaoAtual = 's'; }
 
-    let passoX = moveX * 4;
-    let passoY = moveY * 4;
+    let passoX = moveX * 8;
+    let passoY = moveY * 8;
 
     if (moveX !== 0 && moveY !== 0) {
-        passoX = Math.round(moveX * 4 * 0.7071);
-        passoY = Math.round(moveY * 4 * 0.7071);
+        passoX = Math.round(moveX * 8 * 0.7071);
+        passoY = Math.round(moveY * 8 * 0.7071);
     }
 
     const andando = (moveX !== 0 || moveY !== 0);
-    const salaAtual = rooms.find(element => element.status === true);
 
     roomX -= passoX;
     roomY -= passoY;
-
-    room.style.left = `${roomX}px`;
-    room.style.top = `${roomY}px`;
+    if (moveStatus === true) {
+        room.style.left = `${roomX}px`;
+        room.style.top = `${roomY}px`;
+    }
+    else {
+        player.style.left = `${playerX}px`;
+        player.style.top = `${playerY}px`;
+    }
 
     hitbox()
     atualizarAnimacao(andando, direcaoAtual);
 
     let atualNoCenarioY = (playerY + 96) - roomY;
-
-    if (salaAtual && salaAtual.name === "roomStart") {
-        hitboxLaw = 0;
-
-        if (atualNoCenarioY <= 852) {
-            rooms[0].status = false;
-            rooms[1].status = true;
-            cenario();
-
-            room.style.width = `${3516}px`;
-            room.style.height = `${2116}px`;
-            roomX = (telaInfo.width - 3516) / 2;
-            roomY = -1400;
-
-            room.style.left = `${roomX}px`;
-            room.style.top = `${roomY}px`;
-        }
-    }
-    
-    if (salaAtual && salaAtual.name === "corredor") {
-        hitboxLaw = 1;
-
-        if (atualNoCenarioY >= 2110) {
-            rooms[1].status = false;
-            rooms[0].status = true;
-            cenario();
-
-            room.style.width = `${1540}px`;
-            room.style.height = `${1468}px`;
-            roomX = (telaInfo.width - 1540) / 2;
-            roomY = telaInfo.height - 1468 + 350;
-
-            room.style.left = `${roomX}px`;
-            room.style.top = `${roomY}px`;
-        }
-    }
 
     requestAnimationFrame(mover)
 }
