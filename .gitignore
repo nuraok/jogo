@@ -1,0 +1,11 @@
+# Ignorar dependências pesadas do node
+node_modules/
+package-lock.json
+
+# Ignorar arquivos de edição de imagem
+*.ase
+*.psp
+
+# Ignorar pastas temporárias do sistema
+.DS_Store
+Thumbs.db
