@@ -2,6 +2,6 @@
 
 @theme {
 
-    --background-image-sF: url('../schoolFront.png');
-    --background-image-kD: url('../krisK.png')  
+    --background-image-sF: url('./schoolFront.png');
+    --background-image-kD: url('./krisK.png')  
 }
