@@ -25,12 +25,12 @@ const rooms = [
     {
         name: "roomStart",
         status: true,
-        back: "url('../schoolFront.png')"
+        back: "url('./schoolFront.png')"
     },
     {
         name: "corredor",
         status: false,
-        back: "url('../corredor.png')"
+        back: "url('./corredor.png')"
     }
 ]
 
