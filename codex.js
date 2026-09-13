@@ -54,7 +54,7 @@ const rooms = [
         status: false,
         back: "url('roomBase.png')",
         x1: 2229, x2: 2314, y1: 1580, y2: 1630
-       
+
     },
     {
         name: "room4", // Quarto bloco
@@ -84,7 +84,7 @@ const rooms = [
         name: "room8", // Oitavo bloco (X >= 2996)
         status: false,
         back: "url('roomBase.png')",
-        x1: 2996, x2: 3081, y1: 418, y2:450
+        x1: 2996, x2: 3081, y1: 418, y2: 450
     }
 ];
 
@@ -120,6 +120,10 @@ const teclas = {
     w: false
 }
 
+const getSalaAtual = () => rooms.find(element => element.status === true);
+
+let salaAtiva = getSalaAtual();
+
 function moverBack() {
     room.style.left = `${roomX}px`;
     room.style.top = `${roomY}px`;
@@ -129,9 +133,10 @@ function moverPlayer() {
     player.style.top = `${playerY}px`
 }
 
-function configurarEnquadramento(roomIdx) {
+function configurarEnquadramento(roomIdx, config) {
 
     //style padrão
+    salaAtiva = getSalaAtual();
     rooms.forEach(element => element.status = false);
 
     roomX = (telaInfo.width - roomInfo.width) / 2;
@@ -166,8 +171,17 @@ function configurarEnquadramento(roomIdx) {
 
             room.style.width = `${3516}px`;
             room.style.height = `${2116}px`;
-            roomX = (telaInfo.width - 3516) / 2;
-            roomY = -1400;
+
+            if (config) {
+                roomX = playerX - (salaAtiva.x2 + salaAtiva.x1)/2
+                roomY = (playerY + 96) - (salaAtiva.y2 + salaAtiva.y1)/2
+                direcaoAtual = "s"
+            
+            }
+            else {
+                roomX = (telaInfo.width - 3516) / 2;
+                roomY = -1400;
+            }
 
 
             break
@@ -187,7 +201,7 @@ function configurarEnquadramento(roomIdx) {
                 }
             });
 
-            
+
 
             cenario();
 
@@ -201,7 +215,7 @@ function configurarEnquadramento(roomIdx) {
             playerY = (telaInfo.height - playerInfo.height + 500) / 2
 
             direcaoAtual = 'a';
-        
+
             break
     }
     moverBack()
@@ -292,7 +306,7 @@ function mover() {
     requestAnimationFrame(mover)
 }
 
-const getSalaAtual = () => rooms.find(element => element.status === true);
+
 
 addEventListener('keydown', (tecla) => {
     const key = tecla.key.toLowerCase();
@@ -304,7 +318,7 @@ addEventListener('keydown', (tecla) => {
         console.log(`X no cenário: ${hitboxNoCenarioX.toFixed(1)} | Y no cenário: ${hitboxNoCenarioY.toFixed(1)}`);
         alert(`Posição no cenário:\nX: ${hitboxNoCenarioX.toFixed(1)}\nY: ${hitboxNoCenarioY.toFixed(1)}`);
 
-        const salaAtiva = getSalaAtual();
+        salaAtiva = getSalaAtual();
 
         if (!salaAtiva) return;
 
@@ -323,7 +337,7 @@ addEventListener('keydown', (tecla) => {
                 configurarEnquadramento(0)
             }
             else if (rooms.slice(2).some(element => (hitboxNoCenarioX >= element.x1 && hitboxNoCenarioX <= element.x2 &&
-                    hitboxNoCenarioY >= element.y1 && hitboxNoCenarioY <= element.y2))) {
+                hitboxNoCenarioY >= element.y1 && hitboxNoCenarioY <= element.y2))) {
                 configurarEnquadramento(2)
             }
         }
@@ -331,7 +345,7 @@ addEventListener('keydown', (tecla) => {
             if (hitboxNoCenarioX >= 936 && hitboxNoCenarioX <= 1033 &&
                 hitboxNoCenarioY >= 592 && hitboxNoCenarioY <= 714) {
 
-                configurarEnquadramento(1)
+                configurarEnquadramento(1, true)
             }
         }
     }
