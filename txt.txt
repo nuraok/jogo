@@ -1,43 +1,80 @@
             else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 && //mexendo aqui
                 hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
 
-                configurarEnquadramento(2)
+                 {
+        name: "room1", // Primeiro bloco (Originalmente X >= 1010)
+        status: false,
+        back: "url('roomBase.png')",
+        x1: 1010, x2: 1160, y1: 1580, y2: 1625
+    },
+            }
+            
+
+            else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 &&
+                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
+
+                {
+        name: "room2", // Segundo bloco
+        status: false,
+        back: "url('roomBase.png')",
+        x1: 1010, x2: 1160, y1: 1580, y2: 1625
+    },
             }
 
             else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 &&
                 hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
 
-                configurarEnquadramento(2)
+                 {
+        name: "room3", // Terceiro bloco
+        status: false,
+        back: "url('roomBase.png')",
+        x1: 1010, x2: 1160, y1: 1580, y2: 1625
+    },
             }
 
             else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 &&
                 hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
 
-                configurarEnquadramento(2)
-            }
-
-            else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 &&
-                hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
-
-                configurarEnquadramento(2)
+                {
+        name: "room4", // Quarto bloco
+        status: false,
+        back: "url('roomBase.png')",
+        x1: 1010, x2: 1160, y1: 1580, y2: 1625
+    }, 
             }
 
             else if (hitboxNoCenarioX >= 1012 && hitboxNoCenarioX <= 1096 &&
                 hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
 
-                configurarEnquadramento(2)
+                {
+        name: "room5", // Quinto bloco (X >= 1012)
+        status: false,
+        back: "url('roomBase.png')",
+        x1: 1012, x2: 1096, y1: 418, y2: 426
+    },
             }
 
             else if (hitboxNoCenarioX >= 245 && hitboxNoCenarioX <= 329 &&
                 hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
 
-                configurarEnquadramento(2)
+                {
+        name: "room6", // Sexto bloco (X >= 245)
+        status: false,
+        back: "url('roomBase.png')",
+        x1: 245, x2: 329, y1: 1580, y2: 1625
+    },
             }
 
             else if (hitboxNoCenarioX >= 2229 && hitboxNoCenarioX <= 2314 &&
                 hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
 
-                configurarEnquadramento(2)
+                
+    {
+        name: "room7", // Sétimo bloco (X >= 2229)
+        status: false,
+        back: "url('roomBase.png')",
+        x1: 2229, x2: 2314, y1: 1580, y2: 1625
+    },
             }
 
             else if (hitboxNoCenarioX >= 2996 && hitboxNoCenarioX <= 3081 &&
@@ -49,5 +86,17 @@
             else if (hitboxNoCenarioX >= 1010 && hitboxNoCenarioX <= 1160 &&
                 hitboxNoCenarioY >= 1580 && hitboxNoCenarioY <= 1625) {
 
-                configurarEnquadramento(2)
+                 {
+        name: "room8", // Oitavo bloco (X >= 2996)
+        status: false,
+        back: "url('roomBase.png')",
+        x1: 2996, x2: 3081, y1: 1580, y2: 1625
+    }
             }
+           
+    
+   
+    
+    
+    
+   

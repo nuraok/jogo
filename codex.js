@@ -28,62 +28,63 @@ const rooms = [
     {
         name: "roomStart",
         status: true,
-        back: "url('./schoolFront.png')",
+        back: "url('schoolFront.png')",
         x1: 0, x2: 0, y1: 0, y2: 0
     },
     {
         name: "corredor",
         status: false,
-        back: "url('./corredor.png')",
+        back: "url('corredor.png')",
         x1: 0, x2: 0, y1: 0, y2: 0
     },
     {
         name: "room1", // Primeiro bloco (Originalmente X >= 1010)
         status: false,
-        back: "url('./roomBase.png')",
-        x1: 1010, x2: 1160, y1: 1580, y2: 1625
+        back: "url('roomBase.png')",
+        x1: 245, x2: 329, y1: 1580, y2: 1630
     },
     {
         name: "room2", // Segundo bloco
         status: false,
-        back: "url('./roomBase.png')",
-        x1: 1010, x2: 1160, y1: 1580, y2: 1625
+        back: "url('roomBase.png')",
+        x1: 1010, x2: 1160, y1: 1580, y2: 1630
     },
     {
         name: "room3", // Terceiro bloco
         status: false,
-        back: "url('./roomBase.png')",
-        x1: 1010, x2: 1160, y1: 1580, y2: 1625
+        back: "url('roomBase.png')",
+        x1: 2229, x2: 2314, y1: 1580, y2: 1630
+       
     },
     {
         name: "room4", // Quarto bloco
         status: false,
-        back: "url('./roomBase.png')",
-        x1: 1010, x2: 1160, y1: 1580, y2: 1625
+        back: "url('roomBase.png')",
+        x1: 2996, x2: 3081, y1: 1580, y2: 1630
     },
     {
         name: "room5", // Quinto bloco (X >= 1012)
         status: false,
-        back: "url('./roomBase.png')",
-        x1: 1012, x2: 1096, y1: 1580, y2: 1625
+        back: "url('roomBase.png')",
+        x1: 245, x2: 329, y1: 418, y2: 450
     },
     {
         name: "room6", // Sexto bloco (X >= 245)
         status: false,
-        back: "url('./roomBase.png')",
-        x1: 245, x2: 329, y1: 1580, y2: 1625
+        back: "url('roomBase.png')",
+        x1: 1010, x2: 1160, y1: 418, y2: 450
     },
     {
         name: "room7", // Sétimo bloco (X >= 2229)
         status: false,
-        back: "url('./roomBase.png')",
-        x1: 2229, x2: 2314, y1: 1580, y2: 1625
+        back: "url('roomBase.png')",
+        x1: 2229, x2: 2314, y1: 418, y2: 450
     },
     {
         name: "room8", // Oitavo bloco (X >= 2996)
         status: false,
-        back: "url('./roomBase.png')",
-        x1: 2996, x2: 3081, y1: 1580, y2: 1625
+        back: "url('roomBase.png')",
+        x1: 2996, x2: 3081, y1: 418, y2:450
     }
 ];
 
@@ -179,6 +180,7 @@ function configurarEnquadramento(roomIdx) {
                 if (hitboxNoCenarioX >= element.x1 && hitboxNoCenarioX <= element.x2 &&
                     hitboxNoCenarioY >= element.y1 && hitboxNoCenarioY <= element.y2) {
                     element.status = true
+                    alert(element.name)
                 }
                 else {
                     element.status = false
@@ -198,6 +200,8 @@ function configurarEnquadramento(roomIdx) {
             playerX = (telaInfo.width + playerInfo.width + roomInfo.width / 2) / 2
             playerY = (telaInfo.height - playerInfo.height + 500) / 2
 
+            direcaoAtual = 'a';
+        
             break
     }
     moverBack()
@@ -307,14 +311,14 @@ addEventListener('keydown', (tecla) => {
         if (salaAtiva.name === "roomStart") {
 
 
-            if (hitboxNoCenarioY <= 852) {
+            if (hitboxNoCenarioY <= 876) {
 
                 configurarEnquadramento(1)
             }
         }
         else if (salaAtiva.name === "corredor") {
 
-            if (hitboxNoCenarioY >= 2110) {
+            if (hitboxNoCenarioY >= 2000) {
 
                 configurarEnquadramento(0)
             }
