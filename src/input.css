@@ -1,7 +1,1 @@
 @import "tailwindcss"; 
-
-@theme {
-
-    --background-image-sF: url('./schoolFront.png');
-    --background-image-kD: url('./krisK.png')  
-}

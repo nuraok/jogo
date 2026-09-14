@@ -8,13 +8,17 @@
     <link rel="stylesheet" href="dist/output.css">
 </head>
 
-<body class="flex justify-center items-center w-screen h-screen">
+<body class="flex justify-center items-center w-screen h-screen bg-black">
     <main id="tela" class="relative bg-black h-200 w-300 overflow-hidden aspect-square">
         <template> </template>
 
         <div class="absolute bg-red-500 z-21 opacity-50 hidden" id="hitboxPlayer"></div>
         <div class="absolute bg-cover h-[calc(367px*(4))] w-[calc(385px*(4))] z-19 bottom-10 [image-rendering:pixelated]"></div>
-        <div class="absolute bg-kD bg-no-repeat w-[68px] h-[116px] bg-[position:0px_0px] bg-size-[408px_232px] [image-rendering:pixelated] z-20"
+
+        <div class="absolute [image-rendering:pixelated] z-20" 
+            id="mrFlowery"></div>
+
+        <div class="absolute [image-rendering:pixelated] z-20"
             id="player"></div>
 
         <div class="absolute bg-cover h-[calc(367px*(4))] w-[calc(385px*(4))] z-19 bottom-10 [image-rendering:pixelated]"

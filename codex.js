@@ -1,16 +1,40 @@
 const player = document.getElementById('player')
+const flower = document.getElementById('mrFlowery')
 const debugHit = document.getElementById('hitboxPlayer')
 const room = document.getElementById('background')
 const tela = document.getElementById('tela')
 
 let roomInfo = room.getBoundingClientRect()
-const playerInfo = player.getBoundingClientRect()
 const telaInfo = tela.getBoundingClientRect()
+
+let playerW = 68
+let playerH = 116
+
+let flowerW = 68
+let flowerH = 116
+
+room.style.backgroundImage = "url('schoolFront.png')"
+
+//flowery settings (pre-edits)
+flower.style.width = `${flowerW}px`
+flower.style.height = `${flowerH}px`
+player.style.backgroundImage = "url('flowery-walking.png')"
+player.style.backgroundPosition = "0px 0px"
+player.style.backgroundSize = `${playerW*6}px ${playerH*2}px `
+
+//player settings (pre-edits)
+player.style.width = `${playerW}px`
+player.style.height = `${playerH}px`
+player.style.backgroundImage = "url('krisK.png')"
+player.style.backgroundPosition = "0px 0px"
+player.style.backgroundSize = `${playerW*6}px ${playerH*2}px `
+
+const playerInfo = player.getBoundingClientRect()
 
 let roomX = (telaInfo.width - roomInfo.width) / 2;
 let roomY = telaInfo.height - roomInfo.height - 100
-let playerX = (telaInfo.width - playerInfo.width) / 2;
-let playerY = telaInfo.height - playerInfo.height - 200
+let playerX = (telaInfo.width - playerW) / 2;
+let playerY = telaInfo.height - playerH - 200
 
 let playerHitbox = {};
 let pH = {};
@@ -23,6 +47,7 @@ let contadorFrames = 0;
 
 let hitboxNoCenarioX = playerX - roomX;
 let hitboxNoCenarioY = (playerY + 96) - roomY;
+
 
 const rooms = [
     {
@@ -154,8 +179,8 @@ function configurarEnquadramento(roomIdx, config) {
 
             cenario();
 
-            room.style.width = `${1540}px`;
-            room.style.height = `${1468}px`;
+            room.style.width = "1540px";
+            room.style.height = "1468px";
             roomX = (telaInfo.width - 1540) / 2;
             roomY = telaInfo.height - 1468 + 350;
 
@@ -169,8 +194,8 @@ function configurarEnquadramento(roomIdx, config) {
 
             cenario();
 
-            room.style.width = `${3516}px`;
-            room.style.height = `${2116}px`;
+            room.style.width = "3516px";
+            room.style.height = "2116px";
 
             if (config) {
                 roomX = playerX - (salaAtiva.x2 + salaAtiva.x1)/2
@@ -285,6 +310,14 @@ function mover() {
 
     const andando = (moveX !== 0 || moveY !== 0);
 
+
+
+
+
+
+
+
+    
     if (moveStatus === true) {
         roomX -= passoX;
         roomY -= passoY;
