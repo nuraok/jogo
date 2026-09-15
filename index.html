@@ -26,11 +26,14 @@
         <div class="absolute bg-cover h-[calc(367px*(4))] w-[calc(385px*(4))] z-0 bottom-10 [image-rendering:pixelated]"
             id="background"></div>
 
-        <div class="flex flex-row absolute gap-4 z-30 bg-black h-45 w-240 border-white border-5 p-4" id="dialog">
-            <div id="dialogSprite" class="h-[100%] aspect-square border-2 border-white"></div>
+        <div class="flex flex-row absolute gap-4 z-30 bg-black h-fit w-240 border-white border-5 p-4" id="dialog">
+            <div class="w-[192px] h-[192px]">
+                <div id="dialogSprite" class="[image-rendering:pixelated] mx-auto">
+                </div>
+            </div>
             <div class="relative ">
                 <p class="font-geist top-4 leading-none text-white text-[50px] absolute">*</p>
-                <h1 id="dialogText" class="absolute leading-none top-4 left-8 font-pixel text-white text-2xl">Despite everything, it's still youaaaaaaaaaaaaaaaaaaaaaa</h1>
+                <h1 id="dialogText" class="absolute leading-none top-4 left-8 font-pixel text-white text-2xl"></h1>
             </div>
 
         </div>

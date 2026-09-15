@@ -1,5 +1,4 @@
 import { elementos, sprites, atualizarAnimacao } from './animation.js';
-// import { falas } from './falas.js';
 
 // ---------- primitivas ----------
 
@@ -70,11 +69,11 @@ export function tocarAnimacao(nomeSprite, direcao, duracaoMs) {
 // nada sobre o que a cutscene faz por dentro
 export let cutsceneAtiva = false;
 
-export async function rodarCutscene(fn) {
+export async function rodarCutscene(fn, falaStop = 0) {
     if (cutsceneAtiva) return; // evita rodar duas cutscenes ao mesmo tempo
     cutsceneAtiva = true;
     
-    await fn();
+    await fn(falaStop);
 
     cutsceneAtiva = false;
     
@@ -82,13 +81,12 @@ export async function rodarCutscene(fn) {
 
 // ---------- cenas ----------
 // adicione aqui as cutscenes do jogo, compondo as primitivas acima.
-// exemplo:
-//
-export async function cutsceneIntroducao() {
+export async function cutsceneIntroducao(falaStop) {
     await esperar(300);
-    await moverAte('flower', 540, 270, 8);
+    await moverAte('flower', 540, 270, 6);
     await esperar(800);
     await moverAte('flower', 540, 200, 1);
-    await esperar(1000);
+    await esperar(falaStop);
+    await moverAte('flower', 540, -1000, 10);
 
 }
