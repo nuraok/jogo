@@ -93,6 +93,8 @@ function configurarEnquadramento(roomIdx, config) {
         case 1:
             //style corredor
 
+            direcaoAtual = "w"
+
             moveStatus = true
 
             rooms[roomIdx].status = true;

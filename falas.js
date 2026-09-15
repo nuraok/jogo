@@ -17,7 +17,7 @@ caixaDialogo.style.display = "none";
 const dialogos = {
     1: [
         { linhas: ["Eai, amiguinho!"], sprite: { direcao: "f1", frame: 0 } },
-        { linhas: ["Sou eu, Mr flowery!"], sprite: { direcao: "f2", frame: 0 } },
+        { linhas: ["Sou eu, Mr flowery!"], sprite: { direcao: "f1", frame: 5 } },
     ],
 };
 

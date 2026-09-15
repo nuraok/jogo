@@ -1,4 +1,4 @@
-import { elementos, sprites, atualizarAnimacao } from './animation.js';
+import { elementos, sprites, atualizarAnimacao, definirFrame } from './animation.js';
 import { falas } from './falas.js';
 
 // ---------- primitivas ----------
@@ -45,19 +45,53 @@ export function moverAte(nomeSprite, destinoX, destinoY, velocidade) {
     });
 }
 
-// toca uma animação por uma duração fixa, sem mover o personagem
-export function tocarAnimacao(nomeSprite, direcao, duracaoMs) {
+// Toca uma animação com controle total: se ela fica em loop (e por quanto
+// tempo) e em qual frame ela começa. Cobre os dois casos que você precisa:
+//
+//   await tocarAnimacao('flower', 'LookUp');
+//     -> loop desligado (padrão): passa do frame 0 até o último, uma vez
+//        só, e resolve sozinha ao chegar no fim — sem precisar chutar ms
+//
+//   await tocarAnimacao('flower', 'condense', { loop: true, duracaoMs: 1100 });
+//     -> fica repetindo os frames em loop até completar 1100ms
+//
+//   await tocarAnimacao('flower', 'PUtransition', { frameInicial: 3 });
+//     -> começa direto no frame 3 (em vez do 0) e toca até o fim, uma vez
+//
+// (pra só travar num frame parado, sem tocar nada, use definirFrame — essa
+// função aqui é só pra quando você quer ver os frames passando de verdade)
+export function tocarAnimacao(nomeSprite, direcao, { loop = false, duracaoMs = 0, frameInicial = 0 } = {}) {
     return new Promise(resolve => {
+        const dados = sprites[nomeSprite];
+        const totalFrames = dados.direcoes[direcao].frames.length;
+        let frameAtual = frameInicial;
+        let contador = 0;
         const inicio = performance.now();
+
         function passo() {
-            const decorrido = performance.now() - inicio;
-            atualizarAnimacao(nomeSprite, true, direcao);
-            if (decorrido < duracaoMs) {
-                requestAnimationFrame(passo);
-            } else {
-                atualizarAnimacao(nomeSprite, false, direcao);
-                resolve();
+            definirFrame(nomeSprite, direcao, frameAtual);
+
+            contador++;
+            if (contador >= dados.velocidade) {
+                contador = 0;
+                frameAtual++;
+
+                if (frameAtual >= totalFrames) {
+                    if (!loop) {
+                        resolve();
+                        return;
+                    }
+                    frameAtual = 0; // loop ligado — recomeça o ciclo
+                }
             }
+
+            // em modo loop, só para quando a duração pedida acabar
+            if (loop && (performance.now() - inicio) >= duracaoMs) {
+                resolve();
+                return;
+            }
+
+            requestAnimationFrame(passo);
         }
         passo();
     });
@@ -87,10 +121,11 @@ export async function cutsceneIntroducao(falaStop) {
     await moverAte('flower', 540, 250, 6);
     await esperar(300);
     await falas(1, 1);
-    await tocarAnimacao('flower', 'condense', 1100)
+    await tocarAnimacao('flower', 'condense', { loop: true, duracaoMs: 1100 })
     await falas(1, 2);
-    await tocarAnimacao('flower', 'PUtransition', 5000)
-    await tocarAnimacao('flower', 'LookUp', 140 )//arrumar para rodar apenas uma vez
+    await tocarAnimacao('flower', 'PUtransition')
+    await tocarAnimacao('flower', 'LookUp')
+    await tocarAnimacao('flower', 'Idle', {loop: true, duracaoMs: 1000})
     await esperar(3000);
     await moverAte('flower', 540, -1000, 10);
 

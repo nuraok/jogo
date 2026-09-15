@@ -47,6 +47,11 @@ export const folhas = {
         frameW: 88, frameH: 236,
         colunas: 2, linhas: 1
     },
+    flowerIdle: {
+        imagem: "assets/img/floweryIdle.png",
+        frameW: 212, frameH: 228,
+        colunas: 5, linhas: 1
+    },
     // CORRIGIDO — arquivo real é 696x74px. 696 / 8 = 87 exato,
     // então frameW=87 / frameH=74 fecham certinho com o grid real.
     flowerPUtransition: {
@@ -82,7 +87,8 @@ export const sprites = {
             condense: { folha: 'flowerCondense', frames: gerarFrames(0, 7, 136, 256) },
             // frames recalculados com o frameW/frameH real da folha corrigida (87x74)
             PUtransition: { folha: 'flowerPUtransition', frames: gerarFrames(0, 8, 342, 296) },
-            LookUp: { folha: 'flowerLookUp', frames: gerarFrames(0, 2, 88, 236,) }
+            LookUp: { folha: 'flowerLookUp', frames: gerarFrames(0, 2, 88, 236,) },
+            Idle: {folha: 'flowerIdle', frames: gerarFrames(0, 5, 212, 228, )}
         }
     },
     flowerDialog: {
