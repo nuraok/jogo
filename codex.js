@@ -1,153 +1,63 @@
-const player = document.getElementById('player')
-const flower = document.getElementById('mrFlowery')
-const debugHit = document.getElementById('hitboxPlayer')
-const room = document.getElementById('background')
-const tela = document.getElementById('tela')
+import { atualizarAnimacao, setElementos, elementos, sprites } from './animation.js';
+import { rooms } from './room.js';
+import { getSalaAtual, cenario } from './salas.js';
+import { teclas } from './input.js';
+import { falas } from './falas.js';
+import {
+    calcularAlturaHitbox,
+    atualizarHitboxPlayer,
+    atualizarHitboxFlower,
+    atualizarProfundidade
+} from './hitbox.js';
+import { cutsceneAtiva, cutsceneIntroducao, rodarCutscene } from './cutscene.js';
 
-let roomInfo = room.getBoundingClientRect()
+// desestrutura pra manter o resto do código igual ao original
+const { player, flower, room, tela, caixaDialogo } = elementos;
+
+setElementos();
+
+room.style.backgroundImage = "url('assets/img/schoolFront.png')"
+
+const roomInfo = room.getBoundingClientRect()
 const telaInfo = tela.getBoundingClientRect()
+const dialogInfo = caixaDialogo.getBoundingClientRect()
 
-let playerW = 68
-let playerH = 116
-
-let flowerW = 68
-let flowerH = 116
-
-room.style.backgroundImage = "url('schoolFront.png')"
-
-//flowery settings (pre-edits)
-flower.style.width = `${flowerW}px`
-flower.style.height = `${flowerH}px`
-player.style.backgroundImage = "url('flowery-walking.png')"
-player.style.backgroundPosition = "0px 0px"
-player.style.backgroundSize = `${playerW*6}px ${playerH*2}px `
-
-//player settings (pre-edits)
-player.style.width = `${playerW}px`
-player.style.height = `${playerH}px`
-player.style.backgroundImage = "url('krisK.png')"
-player.style.backgroundPosition = "0px 0px"
-player.style.backgroundSize = `${playerW*6}px ${playerH*2}px `
+caixaDialogo.style.left = `${(telaInfo.width - dialogInfo.width)/2}px`
+caixaDialogo.style.bottom = "20px"
 
 const playerInfo = player.getBoundingClientRect()
 
+const alturaHitbox = calcularAlturaHitbox(playerInfo);
+
 let roomX = (telaInfo.width - roomInfo.width) / 2;
 let roomY = telaInfo.height - roomInfo.height - 100
-let playerX = (telaInfo.width - playerW) / 2;
-let playerY = telaInfo.height - playerH - 200
+let playerX = (telaInfo.width - sprites.player.frameW) / 2;
+let playerY = telaInfo.height - sprites.player.frameH - 200
 
 let playerHitbox = {};
-let pH = {};
-
-let hitboxLaw = null
-
-let direcaoAtual = 's';
-let indexFrame = 0;
-let contadorFrames = 0;
 
 let hitboxNoCenarioX = playerX - roomX;
 let hitboxNoCenarioY = (playerY + 96) - roomY;
 
-
-const rooms = [
-    {
-        name: "roomStart",
-        status: true,
-        back: "url('schoolFront.png')",
-        x1: 0, x2: 0, y1: 0, y2: 0
-    },
-    {
-        name: "corredor",
-        status: false,
-        back: "url('corredor.png')",
-        x1: 0, x2: 0, y1: 0, y2: 0
-    },
-    {
-        name: "room1", // Primeiro bloco (Originalmente X >= 1010)
-        status: false,
-        back: "url('roomBase.png')",
-        x1: 245, x2: 329, y1: 1580, y2: 1630
-    },
-    {
-        name: "room2", // Segundo bloco
-        status: false,
-        back: "url('roomBase.png')",
-        x1: 1010, x2: 1160, y1: 1580, y2: 1630
-    },
-    {
-        name: "room3", // Terceiro bloco
-        status: false,
-        back: "url('roomBase.png')",
-        x1: 2229, x2: 2314, y1: 1580, y2: 1630
-
-    },
-    {
-        name: "room4", // Quarto bloco
-        status: false,
-        back: "url('roomBase.png')",
-        x1: 2996, x2: 3081, y1: 1580, y2: 1630
-    },
-    {
-        name: "room5", // Quinto bloco (X >= 1012)
-        status: false,
-        back: "url('roomBase.png')",
-        x1: 245, x2: 329, y1: 418, y2: 450
-    },
-    {
-        name: "room6", // Sexto bloco (X >= 245)
-        status: false,
-        back: "url('roomBase.png')",
-        x1: 1010, x2: 1160, y1: 418, y2: 450
-    },
-    {
-        name: "room7", // Sétimo bloco (X >= 2229)
-        status: false,
-        back: "url('roomBase.png')",
-        x1: 2229, x2: 2314, y1: 418, y2: 450
-    },
-    {
-        name: "room8", // Oitavo bloco (X >= 2996)
-        status: false,
-        back: "url('roomBase.png')",
-        x1: 2996, x2: 3081, y1: 418, y2: 450
-    }
-];
-
-const SPRITES = {
-    s: [
-        { x: 0, y: 0 },
-        { x: -68, y: 0 },
-        { x: 0, y: 0 },
-        { x: -136, y: 0 }
-    ],
-    w: [
-        { x: -204, y: 0 },
-        { x: -272, y: 0 },
-        { x: -204, y: 0 },
-        { x: -340, y: 0 }
-    ],
-    d: [
-        { x: 0, y: -116 },
-        { x: -68, y: -116 }
-    ],
-    a: [
-        { x: -136, y: -116 },
-        { x: -204, y: -116 }
-    ]
-};
-
 let moveStatus = true
 
-const teclas = {
-    a: false,
-    s: false,
-    d: false,
-    w: false
-}
-
-const getSalaAtual = () => rooms.find(element => element.status === true);
+let direcaoAtual = 's';
 
 let salaAtiva = getSalaAtual();
+
+// 0 = nenhuma cena pendente; cada número é uma cutscene a disparar
+let cenaIdx = 0
+let cFirstCena = true
+
+function playAllCutscenes(cena) {
+    falas(cena)
+    if (cena === 1) {
+        cenaIdx = 0;   // zera antes de rodar, pra não disparar de novo no próximo frame
+        rodarCutscene(cutsceneIntroducao);
+    }
+    // futuras cenas:
+    // if (cena === 2) { cenaIdx = 0; rodarCutscene(outraCena); }
+}
 
 function moverBack() {
     room.style.left = `${roomX}px`;
@@ -198,10 +108,10 @@ function configurarEnquadramento(roomIdx, config) {
             room.style.height = "2116px";
 
             if (config) {
-                roomX = playerX - (salaAtiva.x2 + salaAtiva.x1)/2
-                roomY = (playerY + 96) - (salaAtiva.y2 + salaAtiva.y1)/2
+                roomX = playerX - (salaAtiva.x2 + salaAtiva.x1) / 2
+                roomY = (playerY + 96) - (salaAtiva.y2 + salaAtiva.y1) / 2
                 direcaoAtual = "s"
-            
+
             }
             else {
                 roomX = (telaInfo.width - 3516) / 2;
@@ -247,51 +157,18 @@ function configurarEnquadramento(roomIdx, config) {
     moverPlayer()
 }
 
-function hitbox() {
-    playerHitbox = {
-        p1x: playerX,
-        p1y: playerY + 96,
-        p2x: playerX + playerInfo.width,
-        p2y: playerY + playerInfo.height
-    }
-    debugHit.style.width = `${playerInfo.width}px`
-    debugHit.style.height = `${playerInfo.height - 96}px`
-    debugHit.style.left = `${playerHitbox.p1x}px`
-    debugHit.style.top = `${playerHitbox.p1y}px`
-    pH = playerHitbox
-}
-
-function cenario() {
-    rooms.forEach(element => {
-        if (element.status === true) {
-            room.style.backgroundImage = element.back
-        }
-    });
-}
-
-function atualizarAnimacao(andando, direcao) {
-    const listaFrames = SPRITES[direcao] || SPRITES['s'];
-
-    if (indexFrame >= listaFrames.length) {
-        indexFrame = 0;
-    }
-
-    if (andando) {
-        contadorFrames++;
-        if (contadorFrames >= 10) {
-            indexFrame = (indexFrame + 1) % listaFrames.length;
-            contadorFrames = 0;
-        }
-    } else {
-        indexFrame = 0;
-        contadorFrames = 0;
-    }
-
-    const frameAtual = listaFrames[indexFrame];
-    player.style.backgroundPosition = `${frameAtual.x}px ${frameAtual.y}px`;
-}
-
 function mover() {
+    // enquanto uma cutscene estiver rodando, o player não se move,
+    // mas o loop continua vivo (a cutscene roda seu próprio requestAnimationFrame)
+    if (cutsceneAtiva) {
+        requestAnimationFrame(mover);
+        return;
+    }
+
+    // checa se tem cutscene pendente pra disparar — sem return,
+    // o movimento normal continua no mesmo frame
+    playAllCutscenes(cenaIdx);
+
     let moveX = 0;
     let moveY = 0;
 
@@ -310,14 +187,6 @@ function mover() {
 
     const andando = (moveX !== 0 || moveY !== 0);
 
-
-
-
-
-
-
-
-    
     if (moveStatus === true) {
         roomX -= passoX;
         roomY -= passoY;
@@ -331,19 +200,18 @@ function mover() {
         moverPlayer()
     }
 
-    hitbox()
-    atualizarAnimacao(andando, direcaoAtual);
+    playerHitbox = atualizarHitboxPlayer(playerX, playerY, playerInfo, alturaHitbox);
+    atualizarHitboxFlower(alturaHitbox, salaAtiva);
+    atualizarProfundidade(playerY, playerInfo);
+    atualizarAnimacao('player', andando, direcaoAtual);
 
     let atualNoCenarioY = (playerY + 96) - roomY;
 
     requestAnimationFrame(mover)
 }
 
-
-
 addEventListener('keydown', (tecla) => {
     const key = tecla.key.toLowerCase();
-    if (key in teclas) teclas[key] = true;
 
     if (key === 'enter') {
         hitboxNoCenarioX = playerX - roomX;
@@ -357,9 +225,11 @@ addEventListener('keydown', (tecla) => {
 
         if (salaAtiva.name === "roomStart") {
 
-
             if (hitboxNoCenarioY <= 876) {
-
+                if (cFirstCena === true) {
+                    cenaIdx = 1
+                    cFirstCena = false
+                }
                 configurarEnquadramento(1)
             }
         }
@@ -384,12 +254,6 @@ addEventListener('keydown', (tecla) => {
     }
 });
 
-
-addEventListener('keyup', (tecla) => {
-    const key = tecla.key.toLowerCase();
-    if (key in teclas) teclas[key] = false;
-})
-
 room.style.left = `${roomX}px`;
 room.style.top = `${roomY}px`;
 player.style.left = `${playerX}px`;
@@ -397,10 +261,3 @@ player.style.top = `${playerY}px`;
 
 cenario()
 requestAnimationFrame(mover)
-
-window.addEventListener('blur', () => {
-    teclas.w = false;
-    teclas.a = false;
-    teclas.s = false;
-    teclas.d = false;
-});

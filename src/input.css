@@ -1,1 +1,22 @@
 @import "tailwindcss"; 
+@font-face {
+  font-family: 'Geist Pixel Local';
+  src: url('../assets/fonts/GeistPixel-Regular-VariableFont_ELSH.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pixel Sans Local';
+  src: url('../assets/fonts/DePixelHalbfett.ttf') format('truetype');
+  font-weight: 400 700; 
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* url.font */
+  --font-pixel: "Pixel Sans Local", sans-serif;
+  --font-geist: "Geist Pixel Local", sans-serif;
+}
