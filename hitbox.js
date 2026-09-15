@@ -5,12 +5,14 @@ const { player, flower, debugHit, debugHitFlower } = elementos;
 // altura padrão de hitbox usada tanto pro player quanto pra flower
 // (mesmo valor, já que a flower usa a mesma "área de pés" do player)
 export function calcularAlturaHitbox(playerInfo) {
-    return playerInfo.height - 96;
+    // 120 = offset (cabeça+tronco) medido no sprite novo (KrisWalking.png):
+    // as pernas se separam a partir da linha 30 de 38px nativos -> 30*4=120.
+    return playerInfo.height - 120;
 }
 
 export function atualizarHitboxPlayer(playerX, playerY, playerInfo, alturaHitbox) {
     const p1x = playerX;
-    const p1y = playerY + 96;
+    const p1y = playerY + 120;
     const p2x = playerX + playerInfo.width;
     const p2y = playerY + playerInfo.height;
 

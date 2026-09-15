@@ -33,7 +33,7 @@ let playerY = telaInfo.height - folhas.playerAndar.frameH - 200
 let playerHitbox = {};
 
 let hitboxNoCenarioX = playerX - roomX;
-let hitboxNoCenarioY = (playerY + 96) - roomY;
+let hitboxNoCenarioY = (playerY + 120) - roomY;
 
 let moveStatus = true
 
@@ -106,7 +106,7 @@ function configurarEnquadramento(roomIdx, config) {
 
             if (config) {
                 roomX = playerX - (salaAtiva.x2 + salaAtiva.x1) / 2
-                roomY = (playerY + 96) - (salaAtiva.y2 + salaAtiva.y1) / 2
+                roomY = (playerY + 120) - (salaAtiva.y2 + salaAtiva.y1) / 2
                 direcaoAtual = "s"
 
             }
@@ -174,12 +174,12 @@ function mover() {
     if (teclas.w) { moveY -= 1; direcaoAtual = 'w'; }
     if (teclas.s) { moveY += 1; direcaoAtual = 's'; }
 
-    let passoX = moveX * 8;
-    let passoY = moveY * 8;
+    let passoX = moveX * 10;
+    let passoY = moveY * 10;
 
     if (moveX !== 0 && moveY !== 0) {
-        passoX = Math.round(moveX * 8 * 0.7071);
-        passoY = Math.round(moveY * 8 * 0.7071);
+        passoX = Math.round(moveX * 10 * 0.7071);
+        passoY = Math.round(moveY * 10 * 0.7071);
     }
 
     const andando = (moveX !== 0 || moveY !== 0);
@@ -202,7 +202,7 @@ function mover() {
     atualizarProfundidade(playerY, playerInfo);
     atualizarAnimacao('player', andando, direcaoAtual);
 
-    let atualNoCenarioY = (playerY + 96) - roomY;
+    let atualNoCenarioY = (playerY + 120) - roomY;
 
     requestAnimationFrame(mover)
 }
@@ -214,7 +214,7 @@ addEventListener('keydown', (tecla) => {
 
     if (key === 'enter') {
         hitboxNoCenarioX = playerX - roomX;
-        hitboxNoCenarioY = (playerY + 96) - roomY;
+        hitboxNoCenarioY = (playerY + 120) - roomY;
         console.log(`X no cenário: ${hitboxNoCenarioX.toFixed(1)} | Y no cenário: ${hitboxNoCenarioY.toFixed(1)}`);
         alert(`Posição no cenário:\nX: ${hitboxNoCenarioX.toFixed(1)}\nY: ${hitboxNoCenarioY.toFixed(1)}`);
 

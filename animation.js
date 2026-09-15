@@ -26,11 +26,18 @@ const F_H = 244;
 const Fs_W = 148;
 const Fs_H = 192;
 
+// KrisWalking.png é 76x152 no arquivo real, num grid de 4 colunas x 4
+// linhas -> frame nativo de 19x38. Igual às outras folhas, frameW/frameH
+// aqui já é o nativo x4 (19*4=76, 38*4=152), que é o tamanho exibido em
+// tela; colunas/linhas continuam sendo a contagem de frames do grid real.
+const P_W = 76;
+const P_H = 152;
+
 export const folhas = {
     playerAndar: {
-        imagem: "assets/img/krisK.png",
-        frameW: 68, frameH: 116,
-        colunas: 6, linhas: 2
+        imagem: "assets/img/KrisWalking.png",
+        frameW: P_W, frameH: P_H,
+        colunas: 4, linhas: 4
     },
     flowerAndar: {
         imagem: "assets/img/flowery-walking.png",
@@ -68,12 +75,15 @@ export const folhas = {
 
 export const sprites = {
     player: {
-        velocidade: 10,
+        velocidade: 6,
         direcoes: {
-            s: { folha: 'playerAndar', frames: [{ x: 0, y: 0 }, { x: -68, y: 0 }, { x: 0, y: 0 }, { x: -136, y: 0 }] },
-            w: { folha: 'playerAndar', frames: [{ x: -204, y: 0 }, { x: -272, y: 0 }, { x: -204, y: 0 }, { x: -340, y: 0 }] },
-            d: { folha: 'playerAndar', frames: [{ x: 0, y: -116 }, { x: -68, y: -116 }] },
-            a: { folha: 'playerAndar', frames: [{ x: -136, y: -116 }, { x: -204, y: -116 }] }
+            // grid real da KrisWalking.png: linha 0 = frente (s), linha 1 =
+            // esquerda (a), linha 2 = direita (d), linha 3 = de costas (w) —
+            // 4 frames cada, já na ordem certa do ciclo de passos.
+            s: { folha: 'playerAndar', frames: gerarFrames(0, 4, P_W, P_H) },
+            a: { folha: 'playerAndar', frames: gerarFrames(1, 4, P_W, P_H) },
+            d: { folha: 'playerAndar', frames: gerarFrames(2, 4, P_W, P_H) },
+            w: { folha: 'playerAndar', frames: gerarFrames(3, 4, P_W, P_H) }
         }
     },
     flower: {
