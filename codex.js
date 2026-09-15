@@ -1,8 +1,7 @@
-import { atualizarAnimacao, setElementos, elementos, sprites } from './animation.js';
+import { atualizarAnimacao, setElementos, elementos, folhas } from './animation.js';
 import { rooms } from './room.js';
 import { getSalaAtual, cenario } from './salas.js';
 import { teclas } from './input.js';
-import { falas } from './falas.js';
 import {
     calcularAlturaHitbox,
     atualizarHitboxPlayer,
@@ -10,9 +9,10 @@ import {
     atualizarProfundidade
 } from './hitbox.js';
 import { cutsceneAtiva, cutsceneIntroducao, rodarCutscene } from './cutscene.js';
+import { dialogoAberto } from './falas.js';
 
 // desestrutura pra manter o resto do código igual ao original
-const { player, flower, room, tela, caixaDialogo } = elementos;
+const { player, flower, room, tela } = elementos;
 
 setElementos();
 
@@ -20,10 +20,6 @@ room.style.backgroundImage = "url('assets/img/schoolFront.png')"
 
 const roomInfo = room.getBoundingClientRect()
 const telaInfo = tela.getBoundingClientRect()
-const dialogInfo = caixaDialogo.getBoundingClientRect()
-
-caixaDialogo.style.left = `${(telaInfo.width - dialogInfo.width)/2}px`
-caixaDialogo.style.bottom = "20px"
 
 const playerInfo = player.getBoundingClientRect()
 
@@ -31,8 +27,8 @@ const alturaHitbox = calcularAlturaHitbox(playerInfo);
 
 let roomX = (telaInfo.width - roomInfo.width) / 2;
 let roomY = telaInfo.height - roomInfo.height - 100
-let playerX = (telaInfo.width - sprites.player.frameW) / 2;
-let playerY = telaInfo.height - sprites.player.frameH - 200
+let playerX = (telaInfo.width - folhas.playerAndar.frameW) / 2;
+let playerY = telaInfo.height - folhas.playerAndar.frameH - 200
 
 let playerHitbox = {};
 
@@ -50,7 +46,6 @@ let cenaIdx = 0
 let cFirstCena = true
 
 function playAllCutscenes(cena) {
-    falas(cena)
     if (cena === 1) {
         cenaIdx = 0;   // zera antes de rodar, pra não disparar de novo no próximo frame
         rodarCutscene(cutsceneIntroducao);
@@ -211,6 +206,8 @@ function mover() {
 }
 
 addEventListener('keydown', (tecla) => {
+    if (dialogoAberto) return;
+
     const key = tecla.key.toLowerCase();
 
     if (key === 'enter') {

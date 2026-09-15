@@ -1,7 +1,5 @@
 // animation.js
 
-// Elementos DOM centralizados aqui — o módulo já os captura ao ser carregado,
-// não precisa de nenhuma função pra "buscar" eles.
 export const elementos = {
     debugHitFlower: document.getElementById('hitboxFlower'),
     player: document.getElementById('player'),
@@ -11,11 +9,10 @@ export const elementos = {
     tela: document.getElementById('tela'),
     caixaDialogo: document.getElementById('dialog'),
     textoDialogo: document.getElementById('dialogText'),
-    imgDialogo: document.getElementById('dialogSprite')
-
+    imgDialogo: document.getElementById('dialogSprite'),
+    flowerDialog: document.getElementById('dialogSprite')
 };
 
-// gera N frames em sequência horizontal a partir de uma linha da spritesheet
 function gerarFrames(linha, quantidade, frameW, frameH) {
     const frames = [];
     for (let i = 0; i < quantidade; i++) {
@@ -24,97 +21,135 @@ function gerarFrames(linha, quantidade, frameW, frameH) {
     return frames;
 }
 
-const F_W = 104;  // 26px na fonte × 4 (escala)
-const F_H = 244;  // 61px na fonte × 4
-const Fs_W = 148; 
-const Fs_H = 192; 
+const F_W = 104;
+const F_H = 244;
+const Fs_W = 148;
+const Fs_H = 192;
 
-// Dados de sprite por personagem: tamanho do frame, velocidade da animação
-// e as coordenadas de cada direção dentro do spritesheet.
+export const folhas = {
+    playerAndar: {
+        imagem: "assets/img/krisK.png",
+        frameW: 68, frameH: 116,
+        colunas: 6, linhas: 2
+    },
+    flowerAndar: {
+        imagem: "assets/img/flowery-walking.png",
+        frameW: F_W, frameH: F_H,
+        colunas: 8, linhas: 4
+    },
+    flowerCondense: {
+        imagem: "assets/img/floweryCondense.png",
+        frameW: 136, frameH: 256,
+        colunas: 7, linhas: 1
+    },
+    flowerLookUp: {
+        imagem: "assets/img/floweryLookUp.png",
+        frameW: 88, frameH: 236,
+        colunas: 2, linhas: 1
+    },
+    // CORRIGIDO — arquivo real é 696x74px. 696 / 8 = 87 exato,
+    // então frameW=87 / frameH=74 fecham certinho com o grid real.
+    flowerPUtransition: {
+        imagem: "assets/img/floweryPowerUpTransition.png",
+        frameW: 342, frameH: 296,
+        colunas: 8, linhas: 1
+    },
+    flowerDialog: {
+        imagem: "assets/img/floweryDialog.png",
+        frameW: Fs_W, frameH: Fs_H,
+        colunas: 11, linhas: 4
+    }
+};
+
 export const sprites = {
     player: {
-        frameW: 68,
-        frameH: 116,
         velocidade: 10,
         direcoes: {
-            s: [{ x: 0, y: 0 }, { x: -68, y: 0 }, { x: 0, y: 0 }, { x: -136, y: 0 }],
-            w: [{ x: -204, y: 0 }, { x: -272, y: 0 }, { x: -204, y: 0 }, { x: -340, y: 0 }],
-            d: [{ x: 0, y: -116 }, { x: -68, y: -116 }],
-            a: [{ x: -136, y: -116 }, { x: -204, y: -116 }]
+            s: { folha: 'playerAndar', frames: [{ x: 0, y: 0 }, { x: -68, y: 0 }, { x: 0, y: 0 }, { x: -136, y: 0 }] },
+            w: { folha: 'playerAndar', frames: [{ x: -204, y: 0 }, { x: -272, y: 0 }, { x: -204, y: 0 }, { x: -340, y: 0 }] },
+            d: { folha: 'playerAndar', frames: [{ x: 0, y: -116 }, { x: -68, y: -116 }] },
+            a: { folha: 'playerAndar', frames: [{ x: -136, y: -116 }, { x: -204, y: -116 }] }
         }
     },
     flower: {
-        frameW: F_W,
-        frameH: F_H,
-        velocidade: 14,
+        velocidade: 10,
         direcoes: {
-            s: gerarFrames(0, 4, F_W, F_H),  // linha 0 — de frente
-            d: gerarFrames(1, 4, F_W, F_H),  // linha 1 — perfil direito
-            a: gerarFrames(2, 4, F_W, F_H),  // linha 2 — perfil esquerdo
-            w: gerarFrames(3, 4, F_W, F_H)   // linha 3 — de costas
+            s: { folha: 'flowerAndar', frames: gerarFrames(0, 4, F_W, F_H) },
+            d: { folha: 'flowerAndar', frames: gerarFrames(1, 4, F_W, F_H) },
+            a: { folha: 'flowerAndar', frames: gerarFrames(2, 4, F_W, F_H) },
+            w: { folha: 'flowerAndar', frames: gerarFrames(3, 4, F_W, F_H) },
+
+            condense: { folha: 'flowerCondense', frames: gerarFrames(0, 7, 136, 256) },
+            // frames recalculados com o frameW/frameH real da folha corrigida (87x74)
+            PUtransition: { folha: 'flowerPUtransition', frames: gerarFrames(0, 8, 342, 296) },
+            LookUp: { folha: 'flowerLookUp', frames: gerarFrames(0, 2, 88, 236,) }
         }
     },
     flowerDialog: {
-        frameW: Fs_W,
-        frameH: Fs_H,
         velocidade: 14,
         direcoes: {
-            f1: gerarFrames(0, 11, Fs_W, Fs_H),  // linha 0 — 
-            f2: gerarFrames(1, 10, Fs_W, Fs_H),  // linha 1 — 
-            f3: gerarFrames(2, 9, Fs_W, Fs_H),  // linha 2 —
-            f4: gerarFrames(3, 5, Fs_W, Fs_H)   // linha 3 — 
+            f1: { folha: 'flowerDialog', frames: gerarFrames(0, 11, Fs_W, Fs_H) },
+            f2: { folha: 'flowerDialog', frames: gerarFrames(1, 10, Fs_W, Fs_H) },
+            f3: { folha: 'flowerDialog', frames: gerarFrames(2, 9, Fs_W, Fs_H) },
+            f4: { folha: 'flowerDialog', frames: gerarFrames(3, 5, Fs_W, Fs_H) }
         }
-    },
+    }
 };
 
-// Aplica o estilo inicial (tamanho, imagem, background-size) em cada elemento
-// animado, usando os dados do objeto `sprites` acima.
-export function setElementos() {
-    const p = sprites.player;
-    const f = sprites.flower;
-    const fd = sprites.flowerDialog
-
-    // flowery settings (pre-edits)
-    elementos.flower.style.width = `${f.frameW}px`;
-    elementos.flower.style.height = `${f.frameH}px`;
-    elementos.flower.style.backgroundImage = "url('assets/img/flowery-walking.png')";
-    elementos.flower.style.backgroundPosition = "0px 0px";
-    elementos.flower.style.backgroundSize = `${f.frameW * 8}px ${f.frameH * 4}px`;
-
-    // player settings (pre-edits)
-    elementos.player.style.width = `${p.frameW}px`;
-    elementos.player.style.height = `${p.frameH}px`;
-    elementos.player.style.backgroundImage = "url('assets/img/krisK.png')";
-    elementos.player.style.backgroundPosition = "0px 0px";
-    elementos.player.style.backgroundSize = `${p.frameW * 6}px ${p.frameH * 2}px`;
-
-    // dialogSprite fica no tamanho real do frame (sem cortar nem vazar pro
-    // frame vizinho) — o wrapper no index.html que vira o quadrado, centralizando
-    elementos.imgDialogo.style.width = `${fd.frameW}px`;
-    elementos.imgDialogo.style.height = `${fd.frameH}px`;
-    elementos.imgDialogo.style.backgroundImage = "url('assets/img/floweryDialog.png')";
-    elementos.imgDialogo.style.backgroundRepeat = "no-repeat";
-    elementos.imgDialogo.style.backgroundPosition = "0px 0px";
-    elementos.imgDialogo.style.backgroundSize = `${fd.frameW * 11}px ${fd.frameH * 4}px`;
-}
-
-// Estado de animação por personagem (indexFrame/contadorFrames), guardado num
-// Map pra não misturar a animação de um personagem com a de outro.
 const estados = new Map();
 
 function getEstado(nomeSprite) {
     if (!estados.has(nomeSprite)) {
-        estados.set(nomeSprite, { indexFrame: 0, contadorFrames: 0 });
+        estados.set(nomeSprite, { indexFrame: 0, contadorFrames: 0, folhaAtual: null });
     }
     return estados.get(nomeSprite);
 }
 
-// nomeSprite deve ser a mesma chave usada em `sprites` e `elementos`
-// (ex: 'player', 'flower').
+function aplicarFolha(nomeSprite, nomeFolha) {
+    const estado = getEstado(nomeSprite);
+    if (estado.folhaAtual === nomeFolha) return;
+
+    const novaFolha = folhas[nomeFolha];
+    const el = elementos[nomeSprite];
+    const folhaAnterior = estado.folhaAtual ? folhas[estado.folhaAtual] : null;
+
+    // ao trocar pra uma folha com dimensões diferentes, o left/top (canto
+    // superior-esquerdo) não muda sozinho — então o sprite "cresce" a partir
+    // do 0,0 e parece deslocar/destorcer. Aqui recalculamos left/top pra
+    // manter o mesmo ponto de ancoragem: centro horizontal e base (pés).
+    if (folhaAnterior) {
+        const left = parseFloat(el.style.left) || 0;
+        const top = parseFloat(el.style.top) || 0;
+
+        const novoLeft = left - (novaFolha.frameW - folhaAnterior.frameW) / 2;
+        const novoTop = top - (novaFolha.frameH - folhaAnterior.frameH);
+
+        el.style.left = `${novoLeft}px`;
+        el.style.top = `${novoTop}px`;
+    }
+
+    el.style.width = `${novaFolha.frameW}px`;
+    el.style.height = `${novaFolha.frameH}px`;
+    el.style.backgroundImage = `url('${novaFolha.imagem}')`;
+    el.style.backgroundRepeat = "no-repeat";
+    el.style.backgroundSize = `${novaFolha.frameW * novaFolha.colunas}px ${novaFolha.frameH * novaFolha.linhas}px`;
+
+    estado.folhaAtual = nomeFolha;
+}
+
+export function setElementos() {
+    aplicarFolha('player', 'playerAndar');
+    aplicarFolha('flower', 'flowerAndar');
+    aplicarFolha('flowerDialog', 'flowerDialog');
+}
+
 export function atualizarAnimacao(nomeSprite, andando, direcao) {
     const dados = sprites[nomeSprite];
-    const listaFrames = dados.direcoes[direcao] || dados.direcoes['s'];
+    const entrada = dados.direcoes[direcao] || dados.direcoes['s'];
+    const { folha, frames: listaFrames } = entrada;
     const estado = getEstado(nomeSprite);
+
+    aplicarFolha(nomeSprite, folha);
 
     if (estado.indexFrame >= listaFrames.length) {
         estado.indexFrame = 0;
@@ -132,5 +167,12 @@ export function atualizarAnimacao(nomeSprite, andando, direcao) {
     }
 
     const frameAtual = listaFrames[estado.indexFrame];
+    elementos[nomeSprite].style.backgroundPosition = `${frameAtual.x}px ${frameAtual.y}px`;
+}
+
+export function definirFrame(nomeSprite, direcao, frame) {
+    const { folha, frames: listaFrames } = sprites[nomeSprite].direcoes[direcao];
+    aplicarFolha(nomeSprite, folha);
+    const frameAtual = listaFrames[frame] || listaFrames[0];
     elementos[nomeSprite].style.backgroundPosition = `${frameAtual.x}px ${frameAtual.y}px`;
 }

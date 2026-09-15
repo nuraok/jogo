@@ -10,7 +10,7 @@ export const rooms = [
         name: "corredor",
         status: false,
         back: "url('assets/img/corredor.png')",
-        flowerPosition: {x:510, y:-500},
+        flowerPosition: {x:540, y:-500},
         x1: 0, x2: 0, y1: 0, y2: 0
     },
     {

@@ -1,4 +1,5 @@
 import { elementos, sprites, atualizarAnimacao } from './animation.js';
+import { falas } from './falas.js';
 
 // ---------- primitivas ----------
 
@@ -69,7 +70,7 @@ export function tocarAnimacao(nomeSprite, direcao, duracaoMs) {
 // nada sobre o que a cutscene faz por dentro
 export let cutsceneAtiva = false;
 
-export async function rodarCutscene(fn, falaStop = 0) {
+export async function rodarCutscene(fn, falaStop = 100) {
     if (cutsceneAtiva) return; // evita rodar duas cutscenes ao mesmo tempo
     cutsceneAtiva = true;
     
@@ -83,10 +84,14 @@ export async function rodarCutscene(fn, falaStop = 0) {
 // adicione aqui as cutscenes do jogo, compondo as primitivas acima.
 export async function cutsceneIntroducao(falaStop) {
     await esperar(300);
-    await moverAte('flower', 540, 270, 6);
-    await esperar(800);
-    await moverAte('flower', 540, 200, 1);
-    await esperar(falaStop);
+    await moverAte('flower', 540, 250, 6);
+    await esperar(300);
+    await falas(1, 1);
+    await tocarAnimacao('flower', 'condense', 1100)
+    await falas(1, 2);
+    await tocarAnimacao('flower', 'PUtransition', 5000)
+    await tocarAnimacao('flower', 'LookUp', 140 )//arrumar para rodar apenas uma vez
+    await esperar(3000);
     await moverAte('flower', 540, -1000, 10);
 
 }

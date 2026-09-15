@@ -1,4 +1,4 @@
-import { elementos, sprites } from './animation.js';
+import { elementos, folhas } from './animation.js';
 
 const { player, flower, debugHit, debugHitFlower } = elementos;
 
@@ -26,13 +26,15 @@ export function atualizarHitboxPlayer(playerX, playerY, playerInfo, alturaHitbox
 }
 
 // ancorada na base do sprite (senão flutuaria no meio do corpo dela,
-// já que ela é bem mais alta que o player)
+// já que ela é bem mais alta que o player).
+// Usa sempre as dimensões da folha "base" (flowerAndar) pro cálculo da
+// hitbox, independente de qual animação/folha estiver tocando no momento.
 export function atualizarHitboxFlower(alturaHitbox, salaAtiva) {
     const flowerLeft = parseFloat(flower.style.left) || 0;
     const flowerTop = parseFloat(flower.style.top) || 0;
-    const hitboxTop = flowerTop + sprites.flower.frameH - alturaHitbox;
+    const hitboxTop = flowerTop + folhas.flowerAndar.frameH - alturaHitbox;
 
-    debugHitFlower.style.width = `${sprites.flower.frameW}px`;
+    debugHitFlower.style.width = `${folhas.flowerAndar.frameW}px`;
     debugHitFlower.style.height = `${alturaHitbox}px`;
     debugHitFlower.style.left = `${flowerLeft}px`;
     debugHitFlower.style.top = `${hitboxTop}px`;
@@ -49,7 +51,7 @@ export function atualizarHitboxFlower(alturaHitbox, salaAtiva) {
 export function atualizarProfundidade(playerY, playerInfo) {
     const pesPlayerY = playerY + playerInfo.height;
     const flowerTop = parseFloat(flower.style.top) || 0;
-    const pesFlowerY = flowerTop + sprites.flower.frameH;
+    const pesFlowerY = flowerTop + folhas.flowerAndar.frameH;
 
     if (pesPlayerY < pesFlowerY) {
         player.style.zIndex = 1;
